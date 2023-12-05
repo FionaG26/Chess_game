@@ -3,60 +3,83 @@ from pygame.locals import *
 from enum import Enum
 from typing import List, Tuple
 
+
 class GameState(Enum):
     ONGOING = 0
     CHECK = 1
     CHECKMATE = 2
     STALEMATE = 3
 
+
 class ChessPiece:
     def __init__(self, piece_type: str, color: str):
         self.piece_type = piece_type
         self.color = color
-        self.has_moved = False  # Used for castling and pawn's double move
+        self.has_moved = False
 
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
-        raise NotImplementedError("Subclasses must implement the is_valid_move method")
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
+        raise NotImplementedError
+        ("Subclasses must implement the is_valid_move method")
+
 
 class Pawn(ChessPiece):
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         direction = 1 if self.color == "white" else -1
         if not self.has_moved:
             return (
-                ((end_row - start_row) == direction or (end_row - start_row) == 2 * direction) and
-                start_col == end_col
-            )
+                (end_row - start_row) == direction
+                or (end_row - start_row) == 2 * direction
+            ) and start_col == end_col
         return (end_row - start_row) == direction and start_col == end_col
 
+
 class Rook(ChessPiece):
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         return start_row == end_row or start_col == end_col
 
+
 class Knight(ChessPiece):
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         return (
-            (abs(start_row - end_row) == 2 and abs(start_col - end_col) == 1) or
-            (abs(start_row - end_row) == 1 and abs(start_col - end_col) == 2)
-        )
+            abs(start_row - end_row) == 2 and abs(start_col - end_col) == 1)
+        or (abs(start_row - end_row) == 1 and abs(start_col - end_col) == 2)
+
 
 class Bishop(ChessPiece):
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         return abs(start_row - end_row) == abs(start_col - end_col)
 
+
 class Queen(ChessPiece):
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         return (
-            start_row == end_row or
-            start_col == end_col or
-            abs(start_row - end_row) == abs(start_col - end_col)
+            start_row == end_row
+            or start_col == end_col
+            or abs(start_row - end_row) == abs(start_col - end_col)
         )
 
+
 class King(ChessPiece):
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         return abs(start_row - end_row) <= 1 and abs(start_col - end_col) <= 1
 
     def can_castle(self, start_col: int, end_col: int) -> bool:
         return not self.has_moved and abs(end_col - start_col) == 2
+
 
 class ChessBoard:
     def __init__(self):
@@ -69,7 +92,10 @@ class ChessBoard:
         self.board_size = 8
         self.square_size = self.width // self.board_size
 
-        self.board = [[None for _ in range(self.board_size)] for _ in range(self.board_size)]
+        self.board = [
+            [None for _ in range(self.board_size)]for _ in range
+            (self.board_size)
+        ]
         self.init_board()
 
         self.selected_piece = None
@@ -93,7 +119,12 @@ class ChessBoard:
                 pygame.draw.rect(
                     self.screen,
                     color,
-                    (col * self.square_size, row * self.square_size, self.square_size, self.square_size),
+                    (
+                        col * self.square_size,
+                        row * self.square_size,
+                        self.square_size,
+                        self.square_size,
+                    ),
                 )
 
     def draw_pieces(self):
@@ -101,9 +132,15 @@ class ChessBoard:
             for col in range(self.board_size):
                 piece = self.board[row][col]
                 if piece:
-                    image = pygame.image.load(f"images/{piece.color}_{piece.piece_type}.png")
-                    image = pygame.transform.scale(image, (self.square_size, self.square_size))
-                    self.screen.blit(image, (col * self.square_size, row * self.square_size))
+                    image = pygame.image.load(
+                        f"images/{piece.color}_{piece.piece_type}.png"
+                    )
+                    image = pygame.transform.scale(
+                        image, (self.square_size, self.square_size)
+                    )
+                    self.screen.blit(
+                        image, (col * self.square_size, row * self.square_size)
+                    )
 
     def draw_selected_piece_highlight(self):
         if self.selected_piece:
@@ -121,9 +158,12 @@ class ChessBoard:
 
     def draw_arrows(self, moves: List[Tuple[int, int]]):
         for move in moves:
-            start_col, start_row = self.selected_piece[1], self.selected_piece[0]
+            start_col, start_row = self.selected_piece[1],
+            self.selected_piece[0]
             end_col, end_row = move[1], move[0]
-            arrow_color = (255, 0, 0) if self.board[end_row][end_col] else (0, 255, 0)
+            arrow_color = (
+                255, 0, 0) if self.board[end_row][end_col] else (
+                0, 255, 0)
 
             pygame.draw.line(
                 self.screen,
@@ -153,7 +193,9 @@ class ChessBoard:
                     moves.append((i, j))
         return moves
 
-    def is_valid_move(self, start_row: int, start_col: int, end_row: int, end_col: int) -> bool:
+    def is_valid_move(
+        self, start_row: int, start_col: int, end_row: int, end_col: int
+    ) -> bool:
         piece = self.board[start_row][start_col]
         if not piece:
             return False
@@ -168,11 +210,13 @@ class ChessBoard:
         return False
 
     def is_checkmate(self, color: str) -> bool:
-        # Placeholder: Implement checking if the specified color is in checkmate
+        # Placeholder: Implement checking if the specified color is in
+        # checkmate
         return False
 
     def switch_player(self):
-        self.current_player = "white" if self.current_player == "black" else "black"
+        self.current_player = "white"
+        if self.current_player == "black" else "black"
 
     def play(self):
         running = True
@@ -182,19 +226,39 @@ class ChessBoard:
                     running = False
                 elif event.type == MOUSEBUTTONDOWN:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    clicked_row, clicked_col = mouse_y // self.square_size, mouse_x // self.square_size
+                    clicked_row, clicked_col = (
+                        mouse_y // self.square_size,
+                        mouse_x // self.square_size,
+                    )
 
                     if self.selected_piece is None:
-                        if self.board[clicked_row][clicked_col] and self.board[clicked_row][clicked_col].color == self.current_player:
+                        if (
+                            self.board[clicked_row][clicked_col]
+                            and self.board[clicked_row][clicked_col].color
+                            == self.current_player
+                        ):
                             self.selected_piece = (clicked_row, clicked_col)
                     else:
-                        if (clicked_row, clicked_col) in self.get_moves_for_selected_piece():
-                            self.board[clicked_row][clicked_col] = self.board[self.selected_piece[0]][self.selected_piece[1]]
-                            self.board[self.selected_piece[0]][self.selected_piece[1]] = None
+                        if (
+                            clicked_row,
+                            clicked_col,
+                        ) in self.get_moves_for_selected_piece():
+                            self.board[clicked_row][clicked_col] = self.board[
+                                self.selected_piece[0]
+                            ][self.selected_piece[1]]
+                            self.board[self.selected_piece[0]][
+                                self.selected_piece[1]
+                            ] = None
                             self.selected_piece = None
 
-                            if isinstance(self.board[clicked_row][clicked_col], King):
-                                self.game_state = GameState.CHECKMATE if self.is_checkmate(self.current_player) else GameState.CHECK
+                            if isinstance(
+                                    self.board[clicked_row]
+                                    [clicked_col], King):
+                                self.game_state = (
+                                    GameState.CHECKMATE
+                                    if self.is_checkmate(self.current_player)
+                                    else GameState.CHECK
+                                )
 
                             self.switch_player()
 
@@ -211,7 +275,7 @@ class ChessBoard:
 
         pygame.quit()
 
+
 if __name__ == "__main__":
     chess_board = ChessBoard()
     chess_board.play()
-
