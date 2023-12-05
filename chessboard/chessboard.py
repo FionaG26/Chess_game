@@ -1,5 +1,6 @@
 import pygame
 
+
 class ChessBoard:
     def __init__(self):
         self.board_size = 8
