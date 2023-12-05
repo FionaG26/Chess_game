@@ -11,7 +11,9 @@ class ChessBoard:
         self.black = (89, 89, 89)
 
         # Create Pygame window
-        self.screen = pygame.display.set_mode((self.total_size, self.total_size))
+        self.screen = pygame.display.set_mode(
+            (self.total_size, self.total_size)
+        )
         pygame.display.set_caption("3D Chess Board")
 
         self.clock = pygame.time.Clock()
@@ -45,8 +47,14 @@ class ChessBoard:
             for col in range(self.board_size):
                 color = self.white if (row + col) % 2 == 0 else self.black
                 pygame.draw.rect(
-                    self.screen, color,
-                    (col * self.square_size, row * self.square_size, self.square_size, self.square_size)
+                    self.screen,
+                    color,
+                    (
+                        col * self.square_size,
+                        row * self.square_size,
+                        self.square_size,
+                        self.square_size
+                    )
                 )
 
     def draw_pieces(self):
