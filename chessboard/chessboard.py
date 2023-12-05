@@ -45,8 +45,7 @@ class ChessBoard:
             for col in range(self.board_size):
                 color = self.white if (row + col) % 2 == 0 else self.black
                 pygame.draw.rect(
-                    self.screen,
-                    color,
+                    self.screen, color,
                     (col * self.square_size, row * self.square_size, self.square_size, self.square_size)
                 )
 
