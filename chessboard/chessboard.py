@@ -1,5 +1,12 @@
 import pygame
 
+class ChessPiece:
+    def __init__(self, piece_type, color):
+        self.piece_type = piece_type
+        self.color = color
+
+    def get_type(self):
+        return self.piece_type
 
 class ChessBoard:
     def __init__(self):
@@ -15,7 +22,7 @@ class ChessBoard:
         self.screen = pygame.display.set_mode(
             (self.total_size, self.total_size)
         )
-        pygame.display.set_caption("3D Chess Board")
+        pygame.display.set_caption("Chess Board")
 
         self.clock = pygame.time.Clock()
 
@@ -68,10 +75,9 @@ class ChessBoard:
                 piece_image = self.piece_images[piece_type]
                 self.screen.blit(piece_image, (x, y))
 
-    def place_piece(self, row, col, piece_type, color):
-        if 0 <= row < self.board_size and 0 <= col < self.board_size:
-            self.piece_positions[piece_type].append((row, col))
-            self.piece_colors[piece_type].append(color)
+    def place_piece(self, row, col, piece):
+        piece_type = piece.get_type()
+        self.piece_positions[piece_type].append((row, col))
 
     def run_game(self):
         while True:
