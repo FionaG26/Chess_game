@@ -68,6 +68,11 @@ class ChessBoard:
                 piece_image = self.piece_images[piece_type]
                 self.screen.blit(piece_image, (x, y))
 
+    def place_piece(self, row, col, piece_type, color):
+        if 0 <= row < self.board_size and 0 <= col < self.board_size:
+            self.piece_positions[piece_type].append((row, col))
+            self.piece_colors[piece_type].append(color)
+
     def run_game(self):
         while True:
             for event in pygame.event.get():

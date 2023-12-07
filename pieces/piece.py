@@ -49,8 +49,10 @@ class Knight(ChessPiece):
         self, start_row: int, start_col: int, end_row: int, end_col: int
     ) -> bool:
         return (
-            abs(start_row - end_row) == 2 and abs(start_col - end_col) == 1)
-        or (abs(start_row - end_row) == 1 and abs(start_col - end_col) == 2)
+            abs(start_row - end_row) == 2 and abs(start_col - end_col) == 1
+            ) or (
+                abs(start_row - end_row) == 1 and abs(start_col - end_col) == 2
+                )
 
 
 class Bishop(ChessPiece):
@@ -88,6 +90,8 @@ class ChessBoard:
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Chess")
         self.clock = pygame.time.Clock()
+        self.piece_type = piece_type
+        self.color = color
 
         self.board_size = 8
         self.square_size = self.width // self.board_size
@@ -215,8 +219,10 @@ class ChessBoard:
         return False
 
     def switch_player(self):
-        self.current_player = "white"
-        if self.current_player == "black" else "black"
+        if self.current_player == "white":
+            self.current_player = "black"
+        else:
+            self.current_player = "white"
 
     def play(self):
         running = True
