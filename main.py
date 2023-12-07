@@ -1,17 +1,22 @@
-from chessboard.chessboard import ChessBoard
-from pieces.piece import ChessPiece
+import pygame
+from chess_board import ChessBoard, ChessPiece  # Assuming your files are named chess_board.py and chess_piece.py
 
 
 def main():
-    # Create an instance of the ChessBoard
+    pygame.init()
+
     chess_game = ChessBoard()
 
-    # Example: Create a pawn and place it on the chessboard
-    pawn = ChessPiece("pawn", "white")
-    chess_game.place_piece(1, 2, pawn)
+    # Example: Create pieces and place them on the chessboard
+    white_pawn = ChessPiece("pawn", "white")
+    black_knight = ChessPiece("knight", "black")
 
-    # Run the game loop
+    chess_game.place_piece(1, 2, white_pawn)
+    chess_game.place_piece(6, 3, black_knight)
+
     chess_game.run_game()
+
+    pygame.quit()
 
 
 if __name__ == "__main__":
