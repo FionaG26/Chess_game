@@ -1,5 +1,6 @@
 import pygame
-from chess_board import ChessBoard, ChessPiece  # Assuming your files are named chess_board.py and chess_piece.py
+from chessboard.chessboard import ChessBoard
+from pieces.piece import ChessPiece
 
 
 def main():

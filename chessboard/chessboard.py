@@ -1,5 +1,6 @@
 import pygame
 
+
 class ChessPiece:
     def __init__(self, piece_type, color):
         self.piece_type = piece_type
@@ -7,6 +8,7 @@ class ChessPiece:
 
     def get_type(self):
         return self.piece_type
+
 
 class ChessBoard:
     def __init__(self):

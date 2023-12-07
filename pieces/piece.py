@@ -17,6 +17,9 @@ class ChessPiece:
         self.color = color
         self.has_moved = False
 
+    def get_type(self):
+        return self.piece_type
+
     def is_valid_move(
         self, start_row: int, start_col: int, end_row: int, end_col: int
     ) -> bool:
