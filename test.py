@@ -8,16 +8,15 @@ pygame.display.set_caption("Test Window")
 
 running = True
 while running:
-        for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                                    running = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-                                        # Fill the screen with black color
-                                            screen.fill((0, 0, 0))
+    # Fill the screen with black color
+    screen.fill((0, 0, 0))
 
-                                                # Update the display
-                                                    pygame.display.flip()
+    # Update the display
+    pygame.display.flip()
 
-                                                    # Quit Pygame
-                                                    pygame.quit()
-
+# Quit Pygame
+pygame.quit()
