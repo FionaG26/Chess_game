@@ -1,4 +1,5 @@
 import pygame
+import pygame_gui
 from chessboard.chessboard import ChessBoard
 from pieces.piece import ChessPiece
 
